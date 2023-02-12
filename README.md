@@ -21,5 +21,4 @@ air
 # Todo
 - Check items off list
 - Add new item to list
-- Logging
 - Switch to HTMX

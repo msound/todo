@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/msound/todo/pkg/db"
 	"github.com/msound/todo/pkg/todo"
 	"github.com/msound/todo/pkg/todoservice"
 	"github.com/msound/todo/pkg/view"
+	"github.com/rs/zerolog/log"
 )
 
 type App struct {
@@ -29,12 +29,14 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		list, err = app.S.GetList(listID)
 	} else {
 		// Create a new list, this is a new visitor
+		log.Debug().Msg("new visitor")
 		list, err = app.S.NewList()
 		cookie := http.Cookie{Name: "list_id", Value: list.ID}
 		http.SetCookie(w, &cookie)
+		log.Debug().Str("list_id", list.ID).Msg("new list created")
 	}
 	if err != nil {
-		fmt.Println(err)
+		log.Error().Err(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

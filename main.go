@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"os"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 
 	"github.com/gorilla/mux"
 	"github.com/msound/todo/pkg/db"
@@ -13,7 +14,8 @@ import (
 )
 
 func main() {
-	fmt.Println("TODO")
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	log.Info().Msg("Starting TODO")
 	view.Load()
 	dbClient, err := db.NewClient(os.Getenv("MONGODB_URI"))
 	if err != nil {
@@ -22,5 +24,6 @@ func main() {
 	app := handler.NewApp(dbClient)
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler).Methods("GET")
-	log.Fatalln(http.ListenAndServe(":8000", r))
+	exit := http.ListenAndServe(":8000", r)
+	log.Fatal().Err(exit)
 }
