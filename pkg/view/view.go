@@ -11,6 +11,6 @@ func Load() {
 	templates = template.Must(template.ParseFiles("index.html"))
 }
 
-func Render(w http.ResponseWriter, template string) {
-	templates.ExecuteTemplate(w, template, nil)
+func Render(w http.ResponseWriter, template string, data any) {
+	templates.ExecuteTemplate(w, template, data)
 }
