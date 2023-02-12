@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -21,5 +22,5 @@ func main() {
 	app := handler.NewApp(dbClient)
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler).Methods("GET")
-	http.ListenAndServe(":8000", r)
+	log.Fatalln(http.ListenAndServe(":8000", r))
 }
