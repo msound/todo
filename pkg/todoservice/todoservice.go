@@ -16,10 +16,10 @@ func NewTodoService(s todo.Storage) *TodoService {
 }
 
 func (s *TodoService) NewList() (*todo.List, error) {
-	t := todo.Todo{Title: "Example TODO", Done: false}
+	t := todo.Task{Title: "Example TODO", Done: false}
 	list := todo.List{}
-	list.Todos = make([]todo.Todo, 1)
-	list.Todos[0] = t
+	list.Tasks = make([]todo.Task, 1)
+	list.Tasks[0] = t
 	list.Created = time.Now()
 	err := s.Stor.SaveList(&list)
 	if err != nil {

@@ -19,6 +19,7 @@ air
 ```
 
 # Todo
+- Add ID for task
 - Check items off list
 - Add new item to list
 - Switch to HTMX
