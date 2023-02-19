@@ -6,3 +6,7 @@ body {
     font-style: 'normal';
     text-decoration: line-through;
 }
+
+p .material-symbols-outlined {
+    vertical-align: middle;
+}

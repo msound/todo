@@ -17,6 +17,3 @@ Then, simply run:
 ```
 air
 ```
-
-# Todo
-- add style
