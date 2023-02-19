@@ -1,3 +1,4 @@
-<form class="add-task" data-hx-post="/task" data-hx-target="#tasks" data-hx-swap="beforeend">
+{{ if . }}{{ template "task.html.tpl" . }}{{ end }}
+<form class="add-task" data-hx-post="/task" data-hx-swap="outerHTML">
     <input type="text" name="newtask" size="40" />
 </form>

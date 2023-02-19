@@ -109,5 +109,5 @@ func (app *App) AddTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	view.Render(w, "task.html.tpl", task)
+	view.Render(w, "add-task.html.tpl", task)
 }

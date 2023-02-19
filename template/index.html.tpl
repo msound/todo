@@ -11,7 +11,7 @@
         <h1>TODO</h1>
         <div id="tasks">
         {{ range .Tasks }}{{ template "task.html.tpl" . }}{{ end }}
-        </div>
         {{ template "add-task.html.tpl" }}
+        </div>
     </body>
 </html>
