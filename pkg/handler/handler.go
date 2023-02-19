@@ -27,18 +27,23 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		// Get existing list
 		listID := cookie.Value
 		list, err = app.S.GetList(listID)
+		if err != nil {
+			log.Error().Err(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	} else {
 		// Create a new list, this is a new visitor
 		log.Debug().Msg("new visitor")
 		list, err = app.S.NewList()
-		cookie := http.Cookie{Name: "list_id", Value: list.ID}
+		if err != nil {
+			log.Error().Err(err).Msg("Error creating new list")
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		cookie := http.Cookie{Name: "list_id", Value: list.ID.Hex()}
 		http.SetCookie(w, &cookie)
-		log.Debug().Str("list_id", list.ID).Msg("new list created")
-	}
-	if err != nil {
-		log.Error().Err(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		log.Debug().Str("list_id", list.ID.Hex()).Msg("new list created")
 	}
 
 	view.Render(w, "index.html", list)

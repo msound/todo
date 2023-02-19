@@ -55,7 +55,7 @@ func (c *Client) SaveList(list *todo.List) error {
 	if !ok {
 		return errors.New("invalid ObjectID for newly created list")
 	}
-	list.ID = oid.Hex()
+	list.ID = oid
 
 	return nil
 }
@@ -76,4 +76,26 @@ func (c *Client) GetList(id string) (*todo.List, error) {
 	}
 
 	return &list, nil
+}
+
+func (c *Client) GetNewID() primitive.ObjectID {
+	return primitive.NewObjectID()
+}
+
+func (c *Client) AddTask(listID string, task todo.Task) error {
+	oid, err := primitive.ObjectIDFromHex(listID)
+	if err != nil {
+		return err
+	}
+	update := bson.D{{"$addToSet", bson.D{{"tasks", task}}}}
+	result, err := c.db.Collection(COLLECTION_LIST).UpdateByID(context.TODO(), oid, update)
+	if err != nil {
+		return err
+	}
+
+	if result.ModifiedCount < 1 {
+		return errors.New("error adding task")
+	}
+
+	return nil
 }
