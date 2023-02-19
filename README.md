@@ -19,5 +19,4 @@ air
 ```
 
 # Todo
-- Add loading indicator
 - Add new item to list

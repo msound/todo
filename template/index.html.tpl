@@ -9,7 +9,6 @@
     </head>
     <body>
         <h1>TODO</h1>
-        <p>List ID: {{ .ID.Hex }}</p>
         {{ range .Tasks }}{{ template "task.html.tpl" . }}{{ end }}
     </body>
 </html>
