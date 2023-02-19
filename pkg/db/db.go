@@ -100,7 +100,7 @@ func (c *Client) AddTask(listID string, task todo.Task) error {
 	return nil
 }
 
-func (c *Client) TaskDone(listID string, taskID string) error {
+func (c *Client) TaskDone(listID string, taskID string, done bool) error {
 	listOID, err := primitive.ObjectIDFromHex(listID)
 	if err != nil {
 		return err
@@ -112,7 +112,7 @@ func (c *Client) TaskDone(listID string, taskID string) error {
 	}
 
 	filter := bson.D{{"_id", listOID}, {"tasks._id", taskOID}}
-	update := bson.D{{"$set", bson.D{{"tasks.$.done", true}}}}
+	update := bson.D{{"$set", bson.D{{"tasks.$.done", done}}}}
 	_, err = c.db.Collection(COLLECTION_LIST).UpdateOne(context.TODO(), filter, update)
 
 	return err
