@@ -19,6 +19,5 @@ air
 ```
 
 # Todo
-- Check items off list
+- Uncheck items off list
 - Add new item to list
-- Switch to HTMX

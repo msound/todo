@@ -1,9 +1,11 @@
 package todoservice
 
 import (
+	"errors"
 	"time"
 
 	"github.com/msound/todo/pkg/todo"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type TodoService struct {
@@ -46,4 +48,37 @@ func (s *TodoService) AddTask(listID string, task string) error {
 func (s *TodoService) GetList(id string) (*todo.List, error) {
 	list, err := s.Stor.GetList(id)
 	return list, err
+}
+
+func (s *TodoService) TaskDone(listID string, taskID string) (*todo.Task, error) {
+	var output todo.Task
+
+	err := s.Stor.TaskDone(listID, taskID)
+	if err != nil {
+		return nil, err
+	}
+
+	list, err := s.Stor.GetList(listID)
+	if err != nil {
+		return nil, err
+	}
+
+	taskOID, err := primitive.ObjectIDFromHex(taskID)
+	if err != nil {
+		return nil, err
+	}
+
+	found := false
+	for _, task := range list.Tasks {
+		if task.ID == taskOID {
+			output = task
+			found = true
+		}
+	}
+
+	if !found {
+		return nil, errors.New("task is missing in list")
+	}
+
+	return &output, nil
 }
