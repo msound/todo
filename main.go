@@ -25,6 +25,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler).Methods("GET")
 	r.HandleFunc("/task/{id}/done", app.TaskDoneHandler).Methods("POST")
+	r.HandleFunc("/task/{id}/undo", app.TaskUndoHandler).Methods("POST")
 	exit := http.ListenAndServe(":8000", r)
 	log.Fatal().Err(exit)
 }

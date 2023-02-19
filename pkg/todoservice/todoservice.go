@@ -54,6 +54,10 @@ func (s *TodoService) TaskDone(listID string, taskID string) (*todo.Task, error)
 	return s.markTaskAsDone(listID, taskID, true)
 }
 
+func (s *TodoService) TaskUndo(listID string, taskID string) (*todo.Task, error) {
+	return s.markTaskAsDone(listID, taskID, false)
+}
+
 func (s *TodoService) markTaskAsDone(listID string, taskID string, done bool) (*todo.Task, error) {
 	var output todo.Task
 

@@ -67,3 +67,21 @@ func (app *App) TaskDoneHandler(w http.ResponseWriter, r *http.Request) {
 
 	view.Render(w, "task.html.tpl", task)
 }
+
+func (app *App) TaskUndoHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("list_id")
+	if err != nil {
+		log.Error().Err(err).Msg("List ID cookie missing")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	listID := cookie.Value
+	vars := mux.Vars(r)
+	taskID := vars["id"]
+	task, err := app.S.TaskUndo(listID, taskID)
+	if err != nil {
+		log.Error().Err(err).Msg("Error marking task as done")
+	}
+
+	view.Render(w, "task.html.tpl", task)
+}
