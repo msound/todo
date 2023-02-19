@@ -33,6 +33,7 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		log.Info().Str("listID", listID).Msg("getting list")
 	} else {
 		// Create a new list, this is a new visitor
 		log.Debug().Msg("new visitor")
@@ -44,7 +45,7 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		cookie := http.Cookie{Name: "list_id", Value: list.ID.Hex()}
 		http.SetCookie(w, &cookie)
-		log.Debug().Str("list_id", list.ID.Hex()).Msg("new list created")
+		log.Info().Str("list_id", list.ID.Hex()).Msg("new list created")
 	}
 
 	view.Render(w, "index.html.tpl", list)
@@ -62,9 +63,12 @@ func (app *App) TaskDoneHandler(w http.ResponseWriter, r *http.Request) {
 	taskID := vars["id"]
 	task, err := app.S.TaskDone(listID, taskID)
 	if err != nil {
-		log.Error().Err(err).Msg("Error marking task as done")
+		log.Error().Err(err).Str("listID", listID).Str("taskID", taskID).Msg("Error marking task as done")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
+	log.Info().Str("listID", listID).Str("taskID", taskID).Msg("Marking task as done")
 	view.Render(w, "task.html.tpl", task)
 }
 
@@ -80,8 +84,11 @@ func (app *App) TaskUndoHandler(w http.ResponseWriter, r *http.Request) {
 	taskID := vars["id"]
 	task, err := app.S.TaskUndo(listID, taskID)
 	if err != nil {
-		log.Error().Err(err).Msg("Error marking task as done")
+		log.Error().Err(err).Str("listID", listID).Str("taskID", taskID).Msg("Error marking task as done")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
+	log.Info().Str("listID", listID).Str("taskID", taskID).Msg("Undo task")
 	view.Render(w, "task.html.tpl", task)
 }

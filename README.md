@@ -19,6 +19,5 @@ air
 ```
 
 # Todo
-- Improve logging
 - Add loading indicator
 - Add new item to list
