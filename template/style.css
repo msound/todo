@@ -1,0 +1,8 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.task-done {
+    font-style: 'normal';
+    text-decoration: line-through;
+}

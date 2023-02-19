@@ -46,5 +46,5 @@ func (app *App) IndexHandler(w http.ResponseWriter, r *http.Request) {
 		log.Debug().Str("list_id", list.ID.Hex()).Msg("new list created")
 	}
 
-	view.Render(w, "index.html", list)
+	view.Render(w, "index.html.tpl", list)
 }

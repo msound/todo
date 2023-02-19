@@ -8,7 +8,7 @@ import (
 var templates *template.Template
 
 func Load() {
-	templates = template.Must(template.ParseFiles("index.html"))
+	templates = template.Must(template.ParseGlob("template/*"))
 }
 
 func Render(w http.ResponseWriter, template string, data any) {
