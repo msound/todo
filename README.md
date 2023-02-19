@@ -19,4 +19,4 @@ air
 ```
 
 # Todo
-- Add new item to list
+- Clear form after submit

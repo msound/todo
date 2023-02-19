@@ -92,3 +92,22 @@ func (app *App) TaskUndoHandler(w http.ResponseWriter, r *http.Request) {
 	log.Info().Str("listID", listID).Str("taskID", taskID).Msg("Undo task")
 	view.Render(w, "task.html.tpl", task)
 }
+
+func (app *App) AddTaskHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("list_id")
+	if err != nil {
+		log.Error().Err(err).Msg("List ID cookie missing")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	listID := cookie.Value
+
+	task, err := app.S.AddTask(listID, r.FormValue("newtask"))
+	if err != nil {
+		log.Error().Err(err).Str("listID", listID).Msg("Cannot add task")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	view.Render(w, "task.html.tpl", task)
+}

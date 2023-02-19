@@ -40,9 +40,15 @@ func (s *TodoService) NewList() (*todo.List, error) {
 	// return s.GetList(list.ID.Hex())
 }
 
-func (s *TodoService) AddTask(listID string, task string) error {
-	t := todo.Task{ID: s.Stor.GetNewID(), Title: task, Done: false, Created: time.Now()}
-	return s.Stor.AddTask(listID, t)
+func (s *TodoService) AddTask(listID string, task string) (*todo.Task, error) {
+	taskOID := s.Stor.GetNewID()
+	t := todo.Task{ID: taskOID, Title: task, Done: false, Created: time.Now()}
+	err := s.Stor.AddTask(listID, t)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.getTask(listID, taskOID.Hex())
 }
 
 func (s *TodoService) GetList(id string) (*todo.List, error) {
@@ -59,12 +65,16 @@ func (s *TodoService) TaskUndo(listID string, taskID string) (*todo.Task, error)
 }
 
 func (s *TodoService) markTaskAsDone(listID string, taskID string, done bool) (*todo.Task, error) {
-	var output todo.Task
-
 	err := s.Stor.TaskDone(listID, taskID, done)
 	if err != nil {
 		return nil, err
 	}
+
+	return s.getTask(listID, taskID)
+}
+
+func (s *TodoService) getTask(listID string, taskID string) (*todo.Task, error) {
+	var output todo.Task
 
 	list, err := s.Stor.GetList(listID)
 	if err != nil {
@@ -81,6 +91,7 @@ func (s *TodoService) markTaskAsDone(listID string, taskID string, done bool) (*
 		if task.ID == taskOID {
 			output = task
 			found = true
+			break
 		}
 	}
 
