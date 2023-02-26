@@ -27,6 +27,6 @@ func main() {
 	r.HandleFunc("/task/{id}/done", app.TaskDoneHandler).Methods("POST")
 	r.HandleFunc("/task/{id}/undo", app.TaskUndoHandler).Methods("POST")
 	r.HandleFunc("/task", app.AddTaskHandler).Methods("POST")
-	exit := http.ListenAndServe(":8000", r)
+	exit := http.ListenAndServe(":80", r)
 	log.Fatal().Err(exit)
 }
